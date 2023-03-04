@@ -150,7 +150,7 @@ public class MSButton
         }
         displayLosingMessage();
       } else if (countMines(myRow, myCol) > 0 && !getClickStatus()) {
-        myLabel = Integer.toString(countMines(myRow, myCol));
+        myLabel = "" + countMines(myRow, myCol);
         clicked = true;
       } else {
         clicked = true;
