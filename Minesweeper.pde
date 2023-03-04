@@ -115,7 +115,7 @@ public class MSButton
   {
     width = 500/NUM_COLS;
     height = 500/NUM_ROWS;
-    myRow = row;
+    myRow = row;  
     myCol = col; 
     x = myCol*width;
     y = myRow*height;
@@ -152,7 +152,7 @@ public class MSButton
       } else if (countMines(myRow, myCol) > 0 && !getClickStatus()) {
         myLabel = "" + countMines(myRow, myCol);
         clicked = true;
-      } else {
+      } else if(!clicked){
         clicked = true;
         for(int i = -1; i <= 1; i++){
           for(int j = -1; j <= 1; j++){
