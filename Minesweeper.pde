@@ -8,7 +8,7 @@ private boolean firstClick = true;
 
 void setup ()
 {
-  size(400, 400);
+  size(500, 500);
   textAlign(CENTER, CENTER);
 
   // make the manager
@@ -21,25 +21,28 @@ void setup ()
       buttons[i][j] = new MSButton(i, j);
     }
   }
-  setMines();
 }
-public void setMines()
+public void setMines(int a, int b)
 {
   //your code
-  if (mines.size() >= 16) {
-    return;
+  
+  ArrayList<MSButton> safeButtons = new ArrayList<MSButton>();
+  for(int i = -2; i <= 2; i++){
+    for(int j = -2; j <= 2; j++){
+      if(isValid(a+i, b+j)){
+        safeButtons.add(buttons[a+i][b+j]);
+      }
+    }
   }
-
-  int r, c;
-  r = (int)(Math.random()*NUM_ROWS);
-  c = (int)(Math.random()*NUM_COLS);
-
-  if (mines.contains(buttons[r][c])) {
-    setMines();
+  
+  while(mines.size() < 60){
+    int r, c;
+    r = (int)(Math.random()*NUM_ROWS);
+    c = (int)(Math.random()*NUM_COLS);
+    if(!safeButtons.contains(buttons[r][c]) && !mines.contains(buttons[r][c])){
+      mines.add(buttons[r][c]);
+    }
   }
-
-  mines.add(buttons[r][c]);
-  setMines();
 }
 
 public void draw ()
@@ -68,11 +71,11 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-  
+  System.out.println("You Lose");
 }
 public void displayWinningMessage()
 {
-  
+  System.out.println("You Win");
 }
 public boolean isValid(int r, int c)
 {
@@ -97,6 +100,8 @@ public int countMines(int row, int col)
   }
   return numMines;
 }
+
+
 public class MSButton
 {
   private int myRow, myCol;
@@ -106,8 +111,8 @@ public class MSButton
 
   public MSButton ( int row, int col )
   {
-    width = 400/NUM_COLS;
-    height = 400/NUM_ROWS;
+    width = 500/NUM_COLS;
+    height = 500/NUM_ROWS;
     myRow = row;
     myCol = col; 
     x = myCol*width;
@@ -121,6 +126,11 @@ public class MSButton
   public void mousePressed () 
   {
     //your code here
+    if(firstClick){
+      firstClick = false;
+      setMines(myRow, myCol);
+    }
+    
       if (mouseButton == RIGHT) {
         if(!flagged && !clicked){
           flagged = true;
@@ -131,9 +141,13 @@ public class MSButton
         }
       } else if (mines.contains(this)) {
         displayLosingMessage();
-        System.out.println("You Lose!");
-        clicked = true;
-      } else if (countMines(myRow, myCol) > 0) {
+        for(int i = 0; i < buttons.length; i++){
+          for(int j = 0; j < buttons[i].length; j++){
+            buttons[i][j].setClick(true);
+            buttons[i][j].setFlag(false);
+          }
+        }
+      } else if (countMines(myRow, myCol) > 0 && !getClickStatus()) {
         myLabel = Integer.toString(countMines(myRow, myCol));
         clicked = true;
       } else {
@@ -176,5 +190,11 @@ public class MSButton
   }
   public boolean getClickStatus(){
     return clicked;
+  }
+  public void setFlag(boolean a){
+    flagged = a;
+  }
+  public void setClick(boolean a){
+    clicked = a;
   }
 }
