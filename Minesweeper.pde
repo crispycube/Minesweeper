@@ -8,7 +8,7 @@ private boolean firstClick = true;
 
 void setup ()
 {
-  size(500, 500);
+  size(500, 600);
   textAlign(CENTER, CENTER);
 
   // make the manager
@@ -47,7 +47,7 @@ public void setMines(int a, int b)
 
 public void draw ()
 {
-  background( 0 );
+  background( 255 );
   if (isWon() == true)
     displayWinningMessage();
   
@@ -71,11 +71,13 @@ public boolean isWon()
 }
 public void displayLosingMessage()
 {
-  System.out.println("You Lose");
+  text("You Lost!", 240, 550);
+  noLoop();
 }
 public void displayWinningMessage()
 {
-  System.out.println("You Win");
+  text("You Win!", 240, 550);
+  noLoop();
 }
 public boolean isValid(int r, int c)
 {
@@ -140,13 +142,13 @@ public class MSButton
           clicked = false;
         }
       } else if (mines.contains(this)) {
-        displayLosingMessage();
         for(int i = 0; i < buttons.length; i++){
           for(int j = 0; j < buttons[i].length; j++){
             buttons[i][j].setClick(true);
             buttons[i][j].setFlag(false);
           }
         }
+        displayLosingMessage();
       } else if (countMines(myRow, myCol) > 0 && !getClickStatus()) {
         myLabel = Integer.toString(countMines(myRow, myCol));
         clicked = true;
